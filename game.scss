@@ -1,0 +1,96 @@
+$buttonTop: 250px;
+$width: 800px;
+$height: 600px;
+.bordered {
+    // border: 1px solid black;
+}
+#canvasMenu {
+    position: absolute;
+    top:  $buttonTop;
+    left: 370px;
+    // height: 600px;
+    z-index: 200;
+}
+#canvasDeepMenu {
+    position: absolute;
+    top: $buttonTop - 100px;
+    left: 270px;
+}
+#canvasPointsCounter {
+    margin-left: $width - 110;
+    margin-top: $height - 50;//70;
+    z-index: 200;
+}
+#canvasLevelCounter {
+    margin-left: -10px;
+    margin-top: $height - 50;//70;
+    z-index: 200;
+}
+#canvasButtonLeft {
+    position: absolute;
+    top: $buttonTop;
+    left: 280px;
+}
+#canvasButtonRight {
+    position: absolute;
+    top: $buttonTop;
+    left: 480px;
+}
+canvas {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+#info {
+    position: absolute;
+    width: 200px;
+    height: 240px;
+    left: 50px;
+    top: 200px;
+    color: black;
+    z-index: 200;
+}
+.preety {
+    cursor: pointer;
+    width:25%;
+    margin: 80px auto;
+    text-align: center;
+    border-radius: 10px;
+    list-style:none;
+    padding:0;
+}
+.preety li {
+    float: left;
+    background: #4285F4;
+    color:#fff;
+    font-size:20px;
+    text-transform: uppercase;
+    font-family: sans-serif;
+    font-weight: bold;
+    padding:20px;
+    margin-bottom:1px;
+    margin-right: 40px;
+}
+.preety li:hover {
+    background: darken(#4285F4, 20%);
+    color:#ee2;
+}
+.preety li.first {
+    border-radius: 30px 30px 0 0;
+    background: #2C5FB4;
+}
+.preety li.last {
+    border-radius: 0 0 30px 30px;
+    background: #2C5FB4;
+}
+#answerBox {
+    width: 200px;
+    text-align: right;
+    font-size: 36px;
+    margin: 20px 0 0 850px;
+    text-transform: uppercase;
+    padding: 0;
+    font-weight: bold;
+    padding: 150px;
+    // border: 3px solid blue;
+}

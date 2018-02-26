@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>| Ortografia dla dzieci |</title>
+	<link rel="stylesheet" href="game.css">
+<!-- 	<link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+	<link href='http://fonts.googleapis.com/css?family=Spectral' rel='stylesheet'>
+	<link href='http://fonts.googleapis.com/css?family=Alegreya' rel='stylesheet'> -->
+	<link rel="preload" href="fonst/BioRhyme-Regular.ttf" as="font" type="font/ttf" crossorigin>
+	<link rel="preload" href="fonst/BioRhyme-Bold.ttf" as="font" type="font/ttf" crossorigin>
+	<!-- <link href='http://fonts.googleapis.com/css?family=Biorhyme' rel='stylesheet'> -->
+	<link href='http://fonts.googleapis.com/css?family=Irish+Grover' rel='stylesheet'>
+	<link href='https://fonts.googleapis.com/css?family=Kalam' rel='stylesheet'>
+<!-- 	<link href='http://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'> -->
+<!-- 	<link href='http://fonts.googleapis.com/css?family=Inknut Antiqua' rel='stylesheet'>	
+	<link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+ -->
+</head>
+<body>
+<!-- 	<ul class="preety">
+		<li id="ortografiaButton">Ortografia</li>
+	</ul>
+	 -->
+	 <img src="images/cloud2.png" alt="a picture of cartoon cloud" hidden="hidden" id="cloud1">	 
+	 <img src="images/ground-clipart-footer-5_2.png" alt="a picture of small cartoon cloud" hidden="hidden" id="cloud2">
+	 <img src="images/grass.png" alt="a picture of grass" hidden="hidden" id="grass">
+ 	 <img src="images/round-button-green-small.png" alt="green button inactive" hidden="hidden" id="roundButtonGreen">
+ 	 <img src="images/round-button-green-active.png" alt="green button inactive" hidden="hidden" id="roundButtonGreenActive">
+ 	<div id="windows">
+		<canvas id="canvas" width="800px" height="600px">Your browser does not support Canvas!</canvas>
+		<canvas class="bordered" id="canvasBg" width="800px" height="600px"></canvas>
+		<canvas class="bordered" id="canvasCloud1" width="800px" height="600px"></canvas>
+		<canvas class="bordered" id="canvasCloud2" width="800px" height="600px"></canvas>
+
+		<canvas class="bordered" id="canvasLevelCounter" width="130px" height="100px"></canvas>
+		<canvas class="bordered" id="canvasPointsCounter" width="120px" height="100px"></canvas>
+		<canvas class="bordered" id="canvasMenu" width="140px" height="140px"></canvas>		
+		<canvas class="bordered" id="canvasDeepMenu" width="340px" height="340px"></canvas>	
+		<canvas class="bordered" id="canvasButtonLeft" width="140px" height="140px"></canvas>
+		<canvas class="bordered" id="canvasButtonRight" width="140px" height="140px"></canvas>
+ 	</div>
+
+
+	<div id="answerBox"></div>
+	<div id="info"></div>
+	
+
+	<!-- <script src="engine.js"></script> -->
+	<script src="wordsets.js"></script>
+	<script src="engine.js"></script>
+</body>
+</html>
