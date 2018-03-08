@@ -10,6 +10,8 @@
 	const canvasDeepMenu = document.getElementById('canvasDeepMenu');
 	const canvasButtonLeft = document.getElementById('canvasButtonLeft')
 	const canvasButtonRight = document.getElementById('canvasButtonRight')
+	const canvasBackButton = null;
+	const canvasNextButton = null;
 
   const ctx = canvas.getContext('2d');
   const ctxC1 = canvasCloud1.getContext('2d');
@@ -56,7 +58,7 @@ const level = {
 	offsetY: 32
 };
 const results = {
-	condition: 700,
+	winCondition: 600,
 	won: false,
 	winMessage: "Wygrana!",
 	lostMessage: "Przegrana"
@@ -141,7 +143,7 @@ const buttonRightObject = {
 };
 //--------------------------- game functions ----------------------------------------------------------------------
 function checkIfWon() {
-	results.won = (roundInfo.points > results.condition) ? true : false;
+	results.won = (roundInfo.points >= results.winCondition) ? true : false;
 }
 function buttonClick(e) {
 	if(gameStateObject.state === "menu") {
@@ -543,10 +545,53 @@ function deattachStageEvents() {
 	canvasButtonRight.removeEventListener('mousemove', activateButton.bind(this, buttonRightObject, ctxBtnR));
 	canvasButtonRight.removeEventListener('mouseout', deactivateButton.bind(this, buttonRightObject, ctxBtnR));	
 }
+
+
+
+
+function nextButtonActivateListener(e) {
+	console.log('x: ' + e.clientX + '/ y: ' + e.clientY);
+}
+function nextButtonDeactivateListener(e) {
+
+}
+function attachNextButtonEvents() {
+	// canvas.addEventListener('mousemove', nextButtonActivateListener, false);
+	// canvas.addEventListener('mouseout', nextButtonDeactivateListener, false);
+}
+function deattachNextButtonEvents() {
+	// canvas.removeEventListener('mousemove', nextButtonActivateListener, false);
+	// canvas.removeEventListener('mouseout', nextButtonDeactivateListener, false);
+}
+function backButtonActivateListener(e) {
+	console.log('x: ' + e.clientX + '/ y: ' + e.clientY);
+	function checkIfButtonClicked(e) {
+		let image = canvasDeepMenu.getImageData();
+		console.dir(image);
+	}
+	checkIfButtonClicked(e);
+}
+function backButtonDeactivateListener(e) {
+
+}	
+function attachBackButtonEvents() {
+	canvasBackButton.addEventListener('mousemove', nextButtonActivateListener, false);
+	canvasBackButton.addEventListener('mouseout', nextButtonDeactivateListener, false);
+}
+function deattachBackButtonEvents() {
+	canvasBackButton.removeEventListener('mousemove', nextButtonActivateListener, false);
+	canvasBackButton.removeEventListener('mouseout', nextButtonDeactivateListener, false);
+}
+
+
+
+
+
+
 function whichLevelChosen(e) {
 	let computedStyle = window.getComputedStyle(canvasDeepMenu);
-	let x = 1 + e.clientX - 15 - parseInt(computedStyle.left, 10);
-	let y = 1 + e.clientY - 175 - parseInt(computedStyle.top, 10);
+	let x = 1 + e.pageX - 15 - parseInt(computedStyle.left, 10);
+	let y = 1 + e.pageY - 175 - parseInt(computedStyle.top, 10);
 	roundInfo.currentLevel = Math.ceil(x / 52) + Math.floor(y / 52) * 6;
 
 	answerBox.innerHTML = 'x: ' + x + ', y: ' + y;}
@@ -646,8 +691,10 @@ function updatePoints() {
 	}
 	drawPoints();
 }
+//================== NOT WORKING YET =============================================================
 function wrongAnswerEffect() {
 	console.log("wrong answer effect");
+	bringToTheTop(canvas);
 	let timeOfEffect = 500;
 	let timeOfFrame = timeOfEffect / 10;
 	ctx.fillStyle = "#220000";
@@ -666,7 +713,9 @@ function wrongAnswerEffect() {
 		clearInterval(time);
 	}, timeOfEffect / 2);
 	ctx.clearRect(0,0,canvas.width,canvas.height);
+	bringToTheTop(canvas, 10);
 }
+//===============================================================================================
 function displayCurrentLevel() {
 	ctxL.font = "32px Georgia";
 	if(!level.messageDrawn) {
@@ -693,19 +742,55 @@ function displayCurrentLevel() {
 	ctxL.strokeText(roundInfo.currentLevel, level.offsetX * 2, level.offsetY * 2.3);	
 	ctxL.fillText(roundInfo.currentLevel, level.offsetX * 2, level.offsetY * 2.3);	
 }
-
+function showBackButton(context) {
+ 	let gradient=context.createLinearGradient(0,0, 120,0);
+	gradient.addColorStop("0","magenta");
+	gradient.addColorStop("0.8","blue");
+	gradient.addColorStop("1","#a7f");
+	context.fillStyle = "#2d32ff";
+	context.font = "24px verdana";
+	context.lineWidth = 2.5;
+	context.shadowColor = "#333";
+	context.shadowBlur = 4;
+	context.shadowOffsetX = 2;
+	context.shadowOffsetY = 2;
+	context.translate(-10, 80);
+	context.rotate(Math.PI);
+	context.beginPath();
+	context.moveTo(2,15);
+	context.lineTo(20,60);
+	context.lineTo(96,56);
+	context.lineTo(94,70);
+	context.lineTo(130,40);
+	context.lineTo(85,10);
+	context.lineTo(93,27);
+  context.closePath();
+  context.stroke();
+  context.fill();
+  context.rotate(-Math.PI);
+  context.lineWidth = 1;
+  context.shadowBlur = 3;
+  context.shadowColor = "#333";
+  context.shadowOffsetX = 1;
+  context.shadowOffsetY = 1;
+  context.fillStyle = "white";
+	context.translate(10, -80);
+  context.strokeText("wstecz", -120, 46);
+  context.fillText("wstecz", -120, 46);
+}
 function showNextButton(context) {
  	var gradient=context.createLinearGradient(0,0, 120,0);
 	gradient.addColorStop("0","magenta");
 	gradient.addColorStop("0.8","blue");
 	gradient.addColorStop("1","#a7f");
-	context.fillStyle = "#0024af";
+	context.fillStyle = "#2d32ff";
   context.font = "24px verdana";
   context.lineWidth = 2.5;
   context.shadowColor = "#333";
   context.shadowBlur = 4;
   context.shadowOffsetX = 2;
   context.shadowOffsetY = 2;
+  context.translate(50,0);
   context.beginPath();
   context.moveTo(2,15);
   context.lineTo(20,60);
@@ -725,56 +810,15 @@ function showNextButton(context) {
   context.fillStyle = "white";
   context.strokeText("dalej", 30, 48);
   context.fillText("dalej", 30, 48);
-}
-function showBackButton(context) {
- 	let gradient=context.createLinearGradient(0,0, 120,0);
-	gradient.addColorStop("0","magenta");
-	gradient.addColorStop("0.8","blue");
-	gradient.addColorStop("1","#a7f");
-	context.fillStyle = "#052eaf";
-	context.font = "24px verdana";
-	context.lineWidth = 2.5;
-	context.shadowColor = "#333";
-	context.shadowBlur = 4;
-	context.shadowOffsetX = 2;
-	context.shadowOffsetY = 2;
-	context.translate(-18, 80);
-	context.rotate(Math.PI);
-	context.beginPath();
-	context.moveTo(2,15);
-	context.lineTo(20,60);
-	context.lineTo(96,56);
-	context.lineTo(94,70);
-	context.lineTo(130,40);
-	context.lineTo(85,10);
-	context.lineTo(93,27);
-  context.closePath();
-  // ctx.strokeStyle = "white";
-  context.stroke();
-  context.fill();
-
-  context.rotate(-Math.PI);
-  context.lineWidth = 1;
-  context.shadowBlur = 3;
-  context.shadowColor = "#333";
-  context.shadowOffsetX = 1;
-  context.shadowOffsetY = 1;
-  context.fillStyle = "white";
-	context.translate(18, -80);
-  context.strokeText("wstecz", -120, 46);
-  context.fillText("wstecz", -120, 46);
+  context.translate(-50,0);
 }
 function showEndButtons(won) {
 	if(won) {
 		bringToTheTop(ctxDeepMenu);
 		ctxDeepMenu.translate(150,240);
 		showBackButton(ctxDeepMenu);
-		// attachBackButtonEvents();
-
 		showNextButton(ctxDeepMenu);
-		// attachNextButtonEvents();
 		ctxDeepMenu.translate(-150,-240);
-
 	}
 	else {
 
@@ -810,7 +854,8 @@ function checkGameState() {
 	}
 	if(!gameStateObject.resultsDrawn && gameStateObject.state === "finished") {
 		drawResults();
-		// showEndButtons();
+		attachBackButtonEvents();
+		attachNextButtonEvents();
 	} 
 }
 function loop(timestamp) {
