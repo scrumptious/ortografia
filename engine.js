@@ -38,23 +38,14 @@
         button: document.getElementById('roundButtonGreen'),
         buttonActive: document.getElementById('roundButtonGreenActive')
       };
-      const buttonSize = 140;
-      const squareSize = 50;
+
       let canvases = [];
       let contexes = [];
 
       //        debug only
-      const infoDiv = document.getElementById('info');
-      const answerBox = document.getElementById('answerBox');
+      // const infoDiv = document.getElementById('info');
+      // const answerBox = document.getElementById('answerBox');s
 
-      const wordsSet1 = [
-        ['wujek', 'wójek', 0, 'uncle'],
-        ['tchórz', 'tchurz', 0, 'coward'],
-        ['krul', 'król', 1, 'king'],
-        ['pułka', 'półka', 1, 'shelf'],
-        ['klawiatura', 'klawiatóra', 0, 'keyboard'],
-        ['żók', 'żuk', 1, 'beetle']
-      ];
       const points = {
         offsetX: 32,
         offsetY: 26,
@@ -90,7 +81,6 @@
         currentWord: 0,
         currentLeftWord: "empty",
         currentRightWord: "empty",
-        //for the time being only one wordset is active
         currentWordset: null,
         questionsOccured: [],
         lastButton: null,
@@ -101,8 +91,8 @@
         currentLevel: "Wybierz poziom:"
       };
       const deepMenuObject = {
-        width: canvasDeepMenu.width,
-        height: canvasDeepMenu.height
+        width: canvas.DeepMenu.width,
+        height: canvas.DeepMenu.height
       };
       const cloud1Object = {
         x: -30,
@@ -127,30 +117,40 @@
         id: null
 
       };
-      const buttonMenuObject = {
-        textX: buttonSize / 2 - menuObject.welcomeText.length * 7,
-        textY: buttonSize / 2 + 10,
-        width: buttonSize,
-        height: buttonSize,
-        image: images.button,
-        active: images.buttonActive
-      };
-      const buttonLeftObject = {
-        x: 280,
-        y: 300,
-        width: buttonSize,
-        height: buttonSize,
-        image: images.button,
-        active: images.buttonActive
-      };
-      const buttonRightObject = {
-        x: 480,
-        y: 300,
-        width: buttonSize,
-        height: buttonSize,
-        image: images.button,
-        active: images.buttonActive
-      };
+      const buttonSize = 140;
+      const squareSize = 50;
+      // button and inheriting specific buttons
+      function Button() {
+        this.size = 140;
+        this.width = this.size;
+        this.height = this.size;
+        this.image = images.button;
+        this.imageActive = images.buttonActive;
+      }
+      const button = new Button();
+
+      function ButtonLeft() {
+        this.x = 280;
+        this.y = 300;
+      }
+      ButtonLeft.prototype = new Button();
+      const buttonLeft = new ButtonLeft();
+
+      function ButtonRight() {
+        this.x = 480;
+        this.y = 300;
+      }
+      ButtonRight.prototype = new Button();
+      const buttonRight = new ButtonRight();
+
+      function MenuButton() {
+        this.textOffsetX =  - menuObject.welcomeText.length * 7;
+        this.textOffsetY = 10;
+        this.textX = this.size / 2 + this.textOffsetX;
+        this.textY = this.size / 2 + this.textOffsetY;
+      }
+      MenuButton.prototype = new Button();
+      const menuButton = new MenuButton();
       //--------------------------- game functions ----------------------------------------------------------------------
       function checkIfWon() {
         results.won = (roundInfo.points >= results.winCondition) ? true : false;
@@ -193,18 +193,18 @@
       function activateButton(button, context) {
         let whichButton;
         if(gameStateObject.state === "menu") {
-          context.drawImage(button.active, 0, 0);
+          context.drawImage(images.buttonActive, 0, 0);
           drawMenuText();
         }
         // if (gameStateObject.state === "deepMenu") {
 
         // }
         if(gameStateObject.state === "playing") {
-          whichButton = (button === buttonLeftObject) ?
+          whichButton = (button === buttonLeft) ?
             roundInfo.currentLeftWord :
             roundInfo.currentRightWord;
           context.clearRect(0, 0, button.width, button.height);
-          context.drawImage(button.active, 0, 0);
+          context.drawImage(images.buttonActive, 0, 0);
           setButtonText(context, button, whichButton);
         }
 
@@ -214,19 +214,19 @@
       function deactivateButton(button, context) {
         let whichButton;
         if(gameStateObject.state === "menu") {
-          context.clearRect(0, 0, buttonSize, buttonSize);
-          context.drawImage(button.image, 0, 0);
+          context.clearRect(0, 0, button.size, button.size);
+          context.drawImage(images.button, 0, 0);
           drawMenuText();
         }
         // if (gameStateObject.state === "deepMenu") {
 
         // }
         if(gameStateObject.state === "playing") {
-          whichButton = (button === buttonLeftObject) ?
+          whichButton = (button === buttonLeft) ?
             roundInfo.currentLeftWord :
             roundInfo.currentRightWord;
           context.clearRect(0, 0, button.width, button.height);
-          context.drawImage(button.image, 0, 0);
+          context.drawImage(images.button, 0, 0);
           setButtonText(context, button, whichButton);
         }
 
@@ -317,8 +317,8 @@
       function drawMenuText() {
         context.Menu.font = "28px Biorhyme";
         context.Menu.fillText(menuObject.welcomeText,
-          buttonMenuObject.textX,
-          buttonMenuObject.textY);
+          menuButton.textX,
+          menuButton.textY);
       }
 
       function drawMenu() {
@@ -392,7 +392,7 @@
             canvases[canvases.length - 1].style.position = "absolute";
             canvases[canvases.length - 1].style.top = (i * (squareSize + padding)) + 'px';
             canvases[canvases.length - 1].style.left = (j * (squareSize + padding)) + 'px';
-            document.querySelector("#windows").insertBefore(canvases[canvases.length - 1], canvasDeepMenu);
+            document.querySelector("#windows").insertBefore(canvases[canvases.length - 1], canvas.DeepMenu);
             contexes.push(canvases[canvases.length - 1].getContext('2d'));
             contexes[contexes.length - 1].fillStyle = 'rgb(' + (i * 2 * squareSize / 2 + j * squareSize / 2) + ', ' +
               (i * squareSize / 3 + j * squareSize * 2 / 3) +
@@ -440,7 +440,7 @@
         gradient.addColorStop("1", "#4d00af");
         // Fill with gradient
         context.DeepMenu.fillStyle = gradient;
-        context.Menu.clearRect(0, 0, buttonSize, buttonSize);
+        context.Menu.clearRect(0, 0, button.size, button.size);
         context.DeepMenu.clearRect(0, 0, deepMenuObject.width, deepMenuObject.height);
         context.DeepMenu.font = "bold 36px Irish Grover";
         context.DeepMenu.fillText(menuObject.currentLevel, 30, 140);
@@ -479,13 +479,13 @@
 
       function drawStage() {
         updatePoints();
-        context.DeepMenu.clearRect(0, 0, canvasDeepMenu.width, canvasDeepMenu.height);
+        context.DeepMenu.clearRect(0, 0, canvas.DeepMenu.width, canvas.DeepMenu.height);
         //buttons: left
-        context.ButtonLeft.drawImage(buttonLeftObject.image, 0, 0);
-        setButtonText(context.ButtonLeft, buttonLeftObject, roundInfo.currentLeftWord);
+        context.ButtonLeft.drawImage(images.button, 0, 0);
+        setButtonText(context.ButtonLeft, buttonLeft, roundInfo.currentLeftWord);
         //.. and right
-        context.ButtonRight.drawImage(buttonRightObject.image, 0, 0);
-        setButtonText(context.ButtonRight, buttonRightObject, roundInfo.currentRightWord);
+        context.ButtonRight.drawImage(buttonRight.image, 0, 0);
+        setButtonText(context.ButtonRight, buttonRight, roundInfo.currentRightWord);
       }
 
       function drawCloud(context, cloud) {
@@ -504,9 +504,9 @@
 
       function drawResults() {
         checkIfWon();
-        context.ButtonLeft.clearRect(0, 0, canvasButtonLeft.width, canvasButtonLeft.height);
-        context.ButtonRight.clearRect(0, 0, canvasButtonRight.width, canvasButtonRight.height);
-        bringToTheTop(canvasDeepMenu);
+        context.ButtonLeft.clearRect(0, 0, canvas.ButtonLeft.width, canvas.ButtonLeft.height);
+        context.ButtonRight.clearRect(0, 0, canvas.ButtonRight.width, canvas.ButtonRight.height);
+        bringToTheTop(canvas.DeepMenu);
         context.DeepMenu.fillStyle = 'black';
         context.DeepMenu.font = "bold 36px Verdana";
         (results.won) ? context.DeepMenu.fillText(results.winMessage, 80, 100):
@@ -545,38 +545,38 @@
       }
 
       function menuActivateListener() {
-        activateButton(buttonMenuObject, context.Menu);
+        activateButton(menuButton, context.Menu);
       }
 
       function menuDeactivateListener() {
-        deactivateButton(buttonMenuObject, context.Menu);
+        deactivateButton(menuButton, context.Menu);
       }
 
       function attachMenuEvents() {
-        canvasMenu.addEventListener('mousemove', menuActivateListener, false);
-        canvasMenu.addEventListener('mouseout', menuDeactivateListener, false);
+        canvas.Menu.addEventListener('mousemove', menuActivateListener, false);
+        canvas.Menu.addEventListener('mouseout', menuDeactivateListener, false);
       }
 
       function deattachMenuEvents() {
 
-        canvasMenu.removeEventListener('mousemove', menuActivateListener, false);
-        canvasMenu.removeEventListener('mouseout', menuDeactivateListener, false);
+        canvas.Menu.removeEventListener('mousemove', menuActivateListener, false);
+        canvas.Menu.removeEventListener('mouseout', menuDeactivateListener, false);
       }
 
       function attachStageEvents() {
-        canvasButtonLeft.addEventListener('mousemove', activateButton.bind(this, buttonLeftObject, context.ButtonLeft));
-        canvasButtonLeft.addEventListener('mouseout', deactivateButton.bind(this, buttonLeftObject, context.ButtonLeft));
+        canvas.ButtonLeft.addEventListener('mousemove', activateButton.bind(this, buttonLeft, context.ButtonLeft));
+        canvas.ButtonLeft.addEventListener('mouseout', deactivateButton.bind(this, buttonLeft, context.ButtonLeft));
 
-        canvasButtonRight.addEventListener('mousemove', activateButton.bind(this, buttonRightObject, context.ButtonRight));
-        canvasButtonRight.addEventListener('mouseout', deactivateButton.bind(this, buttonRightObject, context.ButtonRight));
+        canvas.ButtonRight.addEventListener('mousemove', activateButton.bind(this, buttonRight, context.ButtonRight));
+        canvas.ButtonRight.addEventListener('mouseout', deactivateButton.bind(this, buttonRight, context.ButtonRight));
       }
 
       function deattachStageEvents() {
-        canvasButtonLeft.removeEventListener('mousemove', activateButton.bind(this, buttonLeftObject, context.ButtonLeft));
-        canvasButtonLeft.removeEventListener('mouseout', deactivateButton.bind(this, buttonLeftObject, context.ButtonLeft));
+        canvas.ButtonLeft.removeEventListener('mousemove', activateButton.bind(this, buttonLeft, context.ButtonLeft));
+        canvas.ButtonLeft.removeEventListener('mouseout', deactivateButton.bind(this, buttonLeft, context.ButtonLeft));
 
-        canvasButtonRight.removeEventListener('mousemove', activateButton.bind(this, buttonRightObject, context.ButtonRight));
-        canvasButtonRight.removeEventListener('mouseout', deactivateButton.bind(this, buttonRightObject, context.ButtonRight));
+        canvas.ButtonRight.removeEventListener('mousemove', activateButton.bind(this, buttonRight, context.ButtonRight));
+        canvas.ButtonRight.removeEventListener('mouseout', deactivateButton.bind(this, buttonRight, context.ButtonRight));
       }
 
 
@@ -604,7 +604,7 @@
         // console.log('x: ' + e.clientX + '/ y: ' + e.clientY);
 
         function checkIfButtonClicked(e) {
-          let image = canvasDeepMenu.getImageData();
+          let image = canvas.DeepMenu.getImageData();
           console.dir(image);
         }
         checkIfButtonClicked(e);
@@ -615,13 +615,13 @@
       }
 
       function attachBackButtonEvents() {
-        canvasBackButton.addEventListener('mousemove', nextButtonActivateListener, false);
-        canvasBackButton.addEventListener('mouseout', nextButtonDeactivateListener, false);
+        canvas.BackButton.addEventListener('mousemove', nextButtonActivateListener, false);
+        canvas.BackButton.addEventListener('mouseout', nextButtonDeactivateListener, false);
       }
 
       function deattachBackButtonEvents() {
-        canvasBackButton.removeEventListener('mousemove', nextButtonActivateListener, false);
-        canvasBackButton.removeEventListener('mouseout', nextButtonDeactivateListener, false);
+        canvas.BackButton.removeEventListener('mousemove', nextButtonActivateListener, false);
+        canvas.BackButton.removeEventListener('mouseout', nextButtonDeactivateListener, false);
       }
 
 
@@ -630,7 +630,7 @@
 
 
       function whichLevelChosen(e) {
-        let computedStyle = window.getComputedStyle(canvasDeepMenu);
+        let computedStyle = window.getComputedStyle(canvas.DeepMenu);
         let x = 1 + e.pageX - 15 - parseInt(computedStyle.left, 10);
         let y = 1 + e.pageY - 175 - parseInt(computedStyle.top, 10);
         roundInfo.currentLevel = Math.ceil(x / 52) + Math.floor(y / 52) * 6;
@@ -639,7 +639,7 @@
       }
 
       function deepMenuActivateListener(event) {
-        // activateButton(deepMenuObject, context.DeepMenu);
+        activateButton(deepMenuObject, context.DeepMenu);
         whichLevelChosen(event);
       }
 
@@ -649,13 +649,13 @@
 
       function attachDeepMenuEvents() {
         // canvasDeepMenu.addEventListener('mouseover', deepMenuActivateListener, false);
-        canvasDeepMenu.addEventListener('click', deepMenuActivateListener, false);
+        canvas.DeepMenu.addEventListener('click', deepMenuActivateListener, false);
         // canvasDeepMenu.addEventListener('mouseout', deepMenuDeactivateListener, false);
       }
 
       function deattachDeepMenuEvents() {
         // canvasDeepMenu.removeEventListener('mouseover', deepMenuActivateListener, false);
-        canvasDeepMenu.removeEventListener('click', deepMenuActivateListener, false);
+        canvas.DeepMenu.removeEventListener('click', deepMenuActivateListener, false);
         // canvasDeepMenu.removeEventListener('mouseout', deepMenuDeactivateListener, false);
       }
 
@@ -741,7 +741,7 @@
       //================== NOT WORKING YET =============================================================
       function wrongAnswerEffect() {
         console.log("wrong answer effect");
-        bringToTheTop(canvas);
+        bringToTheTop(canvas.Main);
         let timeOfEffect = 500;
         let timeOfFrame = timeOfEffect / 10;
         context.Main.fillStyle = "#220000";
@@ -762,7 +762,7 @@
           clearInterval(time);
         }, timeOfEffect / 2);
         context.Main.clearRect(0, 0, canvas.width, canvas.height);
-        bringToTheTop(canvas, 10);
+        bringToTheTop(canvas.Main, 10);
       }
       //===============================================================================================
       function displayCurrentLevel() {
@@ -866,13 +866,13 @@
 
       function showEndButtons(won) {
         if(won) {
-          bringToTheTop(context.DeepMenu);
+          bringToTheTop(canvas.DeepMenu);
           context.DeepMenu.translate(150, 240);
           showBackButton(context.DeepMenu);
           showNextButton(context.DeepMenu);
           context.DeepMenu.translate(-150, -240);
         } else {
-          bringToTheTop(context.DeepMenu);
+          bringToTheTop(canvas.DeepMenu);
           context.DeepMenu.translate(150, 240);
           showBackButton(context.DeepMenu);
           showNextButton(context.DeepMenu);
@@ -882,14 +882,14 @@
 
       function checkGameState() {
         if(!gameStateObject.menuDrawn && gameStateObject.state === "menu") {
-          bringToTheTop(canvasMenu);
+          bringToTheTop(canvas.Menu);
           drawMenu();
           attachMenuEvents();
           gameStateObject.menuDrawn = true;
         }
         if(!gameStateObject.deepMenuDrawn && gameStateObject.state === "deepMenu") {
           deattachMenuEvents();
-          bringToTheTop(canvasDeepMenu);
+          bringToTheTop(canvas.DeepMenu);
           drawDeepMenu();
 
           gameStateObject.deepMenuDrawn = true;
@@ -898,8 +898,8 @@
         if(!gameStateObject.stageDrawn && gameStateObject.state === "playing") {
           deattachDeepMenuEvents();
           attachStageEvents();
-          bringToTheTop(canvasButtonLeft);
-          bringToTheTop(canvasButtonRight);
+          bringToTheTop(canvas.ButtonLeft);
+          bringToTheTop(canvas.ButtonRight);
           displayCurrentLevel();
           startRound(roundInfo.currentWordset);
           gameStateObject.stageDrawn = true;
@@ -935,8 +935,11 @@
       function start() {
         window.requestAnimationFrame(loop);
       }
-
+      function debug(obj) {
+        console.dir(obj)
+      }
       window.addEventListener('load', function() {
+        // debug(buttonLeft);
         this.lastRender = 0;
         loading();
         setTimeout(start, 300);
