@@ -1,7 +1,7 @@
     (function() {
       "use strict";
       const canvas = {
-        main: document.getElementById('canvas'),
+        Main: document.getElementById('canvas'),
         Cloud1: document.getElementById('canvasCloud1'),
         Cloud2: document.getElementById('canvasCloud2'),
         Points: document.getElementById('canvasPointsCounter'),
@@ -14,30 +14,30 @@
         BackButton: null,
         NextButton: null,
         get width() {
-          return this.main.width;
+          return this.Main.width;
         },
         get height() {
-          return this.main.height;
+          return this.Main.height;
         }
       };
-      // const canvasBackButton = null;
-      // const canvasNextButton = null;
-
-      const ctx = canvas.main.getContext('2d');
-      const ctxC1 = canvas.Cloud1.getContext('2d');
-      const ctxC2 = canvas.Cloud2.getContext('2d');
-      const ctxP = canvas.Points.getContext('2d');
-      const ctxL = canvas.Level.getContext('2d');
-      const ctxBg = canvas.Background.getContext('2d');
-      const ctxMenu = canvas.Menu.getContext('2d');
-      const ctxDeepMenu = canvas.DeepMenu.getContext('2d');
-      const ctxBtnL = canvas.ButtonLeft.getContext('2d');
-      const ctxBtnR = canvas.ButtonRight.getContext('2d');
-
-      const cloud1 = document.getElementById('cloud1');
-      const cloud2 = document.getElementById('cloud2');
-      const buttonImage = document.getElementById('roundButtonGreen');
-      const buttonActive = document.getElementById('roundButtonGreenActive');
+      const context = {
+        Main: canvas.Main.getContext('2d'),
+        Cloud1: canvas.Cloud1.getContext('2d'),
+        Cloud2: canvas.Cloud2.getContext('2d'),
+        Points: canvas.Points.getContext('2d'),
+        Level: canvas.Level.getContext('2d'),
+        Background: canvas.Background.getContext('2d'),
+        Menu: canvas.Menu.getContext('2d'),
+        DeepMenu: canvas.DeepMenu.getContext('2d'),
+        ButtonLeft: canvas.ButtonLeft.getContext('2d'),
+        ButtonRight: canvas.ButtonRight.getContext('2d')
+      };
+      const images = {
+        cloud1: document.getElementById('cloud1'),
+        cloud2: document.getElementById('cloud2'),
+        button: document.getElementById('roundButtonGreen'),
+        buttonActive: document.getElementById('roundButtonGreenActive')
+      };
       const buttonSize = 140;
       const squareSize = 50;
       let canvases = [];
@@ -107,20 +107,20 @@
       const cloud1Object = {
         x: -30,
         y: -20,
-        width: cloud1.width,
-        height: cloud1.height,
+        width: images.cloud1.width,
+        height: images.cloud1.height,
         direction: 1,
         speed: 1,
-        image: cloud1
+        image: images.cloud1
       };
       const cloud2Object = {
         x: 450,
         y: 70,
-        width: cloud2.width,
-        height: cloud2.height,
+        width: images.cloud2.width,
+        height: images.cloud2.height,
         direction: -1,
         speed: -0.5,
-        image: cloud2
+        image: images.cloud2
       };
       const timer = {
         interval: 8000,
@@ -132,24 +132,24 @@
         textY: buttonSize / 2 + 10,
         width: buttonSize,
         height: buttonSize,
-        image: buttonImage,
-        active: buttonActive
+        image: images.button,
+        active: images.buttonActive
       };
       const buttonLeftObject = {
         x: 280,
         y: 300,
         width: buttonSize,
         height: buttonSize,
-        image: buttonImage,
-        active: buttonActive
+        image: images.button,
+        active: images.buttonActive
       };
       const buttonRightObject = {
         x: 480,
         y: 300,
         width: buttonSize,
         height: buttonSize,
-        image: buttonImage,
-        active: buttonActive
+        image: images.button,
+        active: images.buttonActive
       };
       //--------------------------- game functions ----------------------------------------------------------------------
       function checkIfWon() {
@@ -158,7 +158,7 @@
 
       function buttonClick(e) {
         if(gameStateObject.state === "menu") {
-          // ctxMenu.clearRect(0, 0, buttonSize, buttonSize);
+          // context.Menu.clearRect(0, 0, buttonSize, buttonSize);
           gameStateObject.state = "deepMenu";
         } else if(gameStateObject.state === "deepMenu") {
           roundInfo.currentWordset = Object.create(wordsets[roundInfo.currentLevel - 1]);
@@ -315,15 +315,15 @@
       }
 
       function drawMenuText() {
-        ctxMenu.font = "28px Biorhyme";
-        ctxMenu.fillText(menuObject.welcomeText,
+        context.Menu.font = "28px Biorhyme";
+        context.Menu.fillText(menuObject.welcomeText,
           buttonMenuObject.textX,
           buttonMenuObject.textY);
       }
 
       function drawMenu() {
         drawBackground();
-        ctxMenu.drawImage(buttonImage, 0, 0);
+        context.Menu.drawImage(images.button, 0, 0);
         drawMenuText();
       }
       //=====================================================================================================================
@@ -412,20 +412,20 @@
         let number = 0;
         let numberOffsetX = 0;
         //check gradient area cuz something wrong
-        let gradient = ctxDeepMenu.createLinearGradient(0, 175, 0, deepMenuObject.height * 1.5);
+        let gradient = context.DeepMenu.createLinearGradient(0, 175, 0, deepMenuObject.height * 1.5);
         gradient.addColorStop("0", "#0553af");
         gradient.addColorStop("1", "#00b6ff");
-        // ctxDeepMenu.fillStyle = '#999';
+        // context.DeepMenu.fillStyle = '#999';
         for(let i = 0; i < 6; i++) {
           for(let j = 0; j < 3; j++) {
             number = 1 + j * 6 + i;
             numberOffsetX = (number > 9) ? numberOffsetX = -4 : numberOffsetX = 8;
-            ctxDeepMenu.fillStyle = gradient;
-            ctxDeepMenu.fillRect(margin + i * (squareSize + padding), margin + j * (squareSize + padding) + 160, squareSize, squareSize);
+            context.DeepMenu.fillStyle = gradient;
+            context.DeepMenu.fillRect(margin + i * (squareSize + padding), margin + j * (squareSize + padding) + 160, squareSize, squareSize);
 
-            ctxDeepMenu.font = "bold 36px Georgia";
-            ctxDeepMenu.fillStyle = '#ffff5c';
-            ctxDeepMenu.fillText(number, squareSize / 2 + numberOffsetX + i * squareSize + i * 2, 50 + j * 2 + 160 + j * squareSize);
+            context.DeepMenu.font = "bold 36px Georgia";
+            context.DeepMenu.fillStyle = '#ffff5c';
+            context.DeepMenu.fillText(number, squareSize / 2 + numberOffsetX + i * squareSize + i * 2, 50 + j * 2 + 160 + j * squareSize);
           }
         }
       }
@@ -433,29 +433,29 @@
       //=====================================================================================================================
       function drawDeepMenu() {
         // Create gradient
-        let gradient = ctxDeepMenu.createLinearGradient(0, 0, deepMenuObject.width, 0);
-        let gradient2 = ctxDeepMenu.createLinearGradient(0, 0, deepMenuObject.width, deepMenuObject.height);
+        let gradient = context.DeepMenu.createLinearGradient(0, 0, deepMenuObject.width, 0);
+        let gradient2 = context.DeepMenu.createLinearGradient(0, 0, deepMenuObject.width, deepMenuObject.height);
         gradient.addColorStop("0", "#00005b");
         gradient.addColorStop("0.6", "#005160");
         gradient.addColorStop("1", "#4d00af");
         // Fill with gradient
-        ctxDeepMenu.fillStyle = gradient;
-        ctxMenu.clearRect(0, 0, buttonSize, buttonSize);
-        ctxDeepMenu.clearRect(0, 0, deepMenuObject.width, deepMenuObject.height);
-        ctxDeepMenu.font = "bold 36px Irish Grover";
-        ctxDeepMenu.fillText(menuObject.currentLevel, 30, 140);
+        context.DeepMenu.fillStyle = gradient;
+        context.Menu.clearRect(0, 0, buttonSize, buttonSize);
+        context.DeepMenu.clearRect(0, 0, deepMenuObject.width, deepMenuObject.height);
+        context.DeepMenu.font = "bold 36px Irish Grover";
+        context.DeepMenu.fillText(menuObject.currentLevel, 30, 140);
 
         gradient2.addColorStop('0', '#239fff');
         gradient2.addColorStop('0.4', '#a5e1ff');
         gradient2.addColorStop('0.6', '#a5e1ff');
         gradient2.addColorStop('1', '#00c7f3');
-        // ctxDeepMenu.fillStyle = '#9bc7ff';
-        ctxDeepMenu.fillStyle = gradient2;
-        ctxDeepMenu.fillRect(0, 160, deepMenuObject.width, deepMenuObject.height);
+        // context.DeepMenu.fillStyle = '#9bc7ff';
+        context.DeepMenu.fillStyle = gradient2;
+        context.DeepMenu.fillRect(0, 160, deepMenuObject.width, deepMenuObject.height);
 
-        ctxDeepMenu.strokeStyle = "#000";
-        ctxDeepMenu.lineWidth = 2;
-        ctxDeepMenu.strokeRect(1, 159, deepMenuObject.width - 2, deepMenuObject.height - 160);
+        context.DeepMenu.strokeStyle = "#000";
+        context.DeepMenu.lineWidth = 2;
+        context.DeepMenu.strokeRect(1, 159, deepMenuObject.width - 2, deepMenuObject.height - 160);
 
         drawDeepMenuSquares();
         // drawCanvasSquares();
@@ -463,29 +463,29 @@
 
       function drawBackground() {
         //background
-        let gradient = ctxBg.createLinearGradient(0, 0, canvas.width, canvas.height);
+        let gradient = context.Background.createLinearGradient(0, 0, canvas.width, canvas.height);
         gradient.addColorStop('0', '#0553af');
         gradient.addColorStop('1.0', '#a5ffff');
-        // ctxBg.fillStyle = '#86bddf';
-        ctxBg.fillStyle = gradient;
-        ctxBg.fillRect(0, 0, canvas.width, canvas.height);
+        // context.Background.fillStyle = '#86bddf';
+        context.Background.fillStyle = gradient;
+        context.Background.fillRect(0, 0, canvas.width, canvas.height);
         //clouds
-        ctxC1.drawImage(cloud1, cloud1Object.x, cloud1Object.y);
-        ctxC2.drawImage(cloud2, cloud2Object.x, cloud2Object.y);
+        context.Cloud1.drawImage(images.cloud1, cloud1Object.x, cloud1Object.y);
+        context.Cloud2.drawImage(images.cloud2, cloud2Object.x, cloud2Object.y);
         //grass
         let grass = document.getElementById('grass');
-        ctxBg.drawImage(grass, 0, 405);
+        context.Background.drawImage(grass, 0, 405);
       }
 
       function drawStage() {
         updatePoints();
-        ctxDeepMenu.clearRect(0, 0, canvasDeepMenu.width, canvasDeepMenu.height);
+        context.DeepMenu.clearRect(0, 0, canvasDeepMenu.width, canvasDeepMenu.height);
         //buttons: left
-        ctxBtnL.drawImage(buttonLeftObject.image, 0, 0);
-        setButtonText(ctxBtnL, buttonLeftObject, roundInfo.currentLeftWord);
+        context.ButtonLeft.drawImage(buttonLeftObject.image, 0, 0);
+        setButtonText(context.ButtonLeft, buttonLeftObject, roundInfo.currentLeftWord);
         //.. and right
-        ctxBtnR.drawImage(buttonRightObject.image, 0, 0);
-        setButtonText(ctxBtnR, buttonRightObject, roundInfo.currentRightWord);
+        context.ButtonRight.drawImage(buttonRightObject.image, 0, 0);
+        setButtonText(context.ButtonRight, buttonRightObject, roundInfo.currentRightWord);
       }
 
       function drawCloud(context, cloud) {
@@ -504,27 +504,27 @@
 
       function drawResults() {
         checkIfWon();
-        ctxBtnL.clearRect(0, 0, canvasButtonLeft.width, canvasButtonLeft.height);
-        ctxBtnR.clearRect(0, 0, canvasButtonRight.width, canvasButtonRight.height);
+        context.ButtonLeft.clearRect(0, 0, canvasButtonLeft.width, canvasButtonLeft.height);
+        context.ButtonRight.clearRect(0, 0, canvasButtonRight.width, canvasButtonRight.height);
         bringToTheTop(canvasDeepMenu);
-        ctxDeepMenu.fillStyle = 'black';
-        ctxDeepMenu.font = "bold 36px Verdana";
-        (results.won) ? ctxDeepMenu.fillText(results.winMessage, 80, 100):
-          ctxDeepMenu.fillText(results.lostMessage, 80, 100);
+        context.DeepMenu.fillStyle = 'black';
+        context.DeepMenu.font = "bold 36px Verdana";
+        (results.won) ? context.DeepMenu.fillText(results.winMessage, 80, 100):
+          context.DeepMenu.fillText(results.lostMessage, 80, 100);
         //show good and answers count ..
-        ctxDeepMenu.font = "bold 24px Georgia";
+        context.DeepMenu.font = "bold 24px Georgia";
         let text1 = "Dobre odpowiedzi: ";
-        let text1width = Math.round(ctxDeepMenu.measureText(text1).width);
-        ctxDeepMenu.fillText(text1, 20, 180);
-        ctxDeepMenu.fillStyle = "green";
-        ctxDeepMenu.fillText(roundInfo.goodAnswers, 20 + text1width + 10, 180); //10 for padding
+        let text1width = Math.round(context.DeepMenu.measureText(text1).width);
+        context.DeepMenu.fillText(text1, 20, 180);
+        context.DeepMenu.fillStyle = "green";
+        context.DeepMenu.fillText(roundInfo.goodAnswers, 20 + text1width + 10, 180); //10 for padding
         //and bad answers..
         let text2 = "Błędy: ";
-        let text2width = Math.round(ctxDeepMenu.measureText(text2).width);
-        ctxDeepMenu.fillStyle = "black";
-        ctxDeepMenu.fillText(text2, 20, 180 + 30 + 10);
-        ctxDeepMenu.fillStyle = "red";
-        ctxDeepMenu.fillText(roundInfo.badAnswers, 20 + text2width + 10, 180 + 30 + 10); //10 for padding
+        let text2width = Math.round(context.DeepMenu.measureText(text2).width);
+        context.DeepMenu.fillStyle = "black";
+        context.DeepMenu.fillText(text2, 20, 180 + 30 + 10);
+        context.DeepMenu.fillStyle = "red";
+        context.DeepMenu.fillText(roundInfo.badAnswers, 20 + text2width + 10, 180 + 30 + 10); //10 for padding
         //show buttons to control what to do next
         (results.won) ? showEndButtons(true): showEndButtons(false);
 
@@ -533,8 +533,8 @@
 
       function draw() {
         // Draw the state of the world
-        drawCloud(ctxC1, cloud1Object);
-        drawCloud(ctxC2, cloud2Object);
+        drawCloud(context.Cloud1, cloud1Object);
+        drawCloud(context.Cloud2, cloud2Object);
 
       }
 
@@ -545,11 +545,11 @@
       }
 
       function menuActivateListener() {
-        activateButton(buttonMenuObject, ctxMenu);
+        activateButton(buttonMenuObject, context.Menu);
       }
 
       function menuDeactivateListener() {
-        deactivateButton(buttonMenuObject, ctxMenu);
+        deactivateButton(buttonMenuObject, context.Menu);
       }
 
       function attachMenuEvents() {
@@ -564,19 +564,19 @@
       }
 
       function attachStageEvents() {
-        canvasButtonLeft.addEventListener('mousemove', activateButton.bind(this, buttonLeftObject, ctxBtnL));
-        canvasButtonLeft.addEventListener('mouseout', deactivateButton.bind(this, buttonLeftObject, ctxBtnL));
+        canvasButtonLeft.addEventListener('mousemove', activateButton.bind(this, buttonLeftObject, context.ButtonLeft));
+        canvasButtonLeft.addEventListener('mouseout', deactivateButton.bind(this, buttonLeftObject, context.ButtonLeft));
 
-        canvasButtonRight.addEventListener('mousemove', activateButton.bind(this, buttonRightObject, ctxBtnR));
-        canvasButtonRight.addEventListener('mouseout', deactivateButton.bind(this, buttonRightObject, ctxBtnR));
+        canvasButtonRight.addEventListener('mousemove', activateButton.bind(this, buttonRightObject, context.ButtonRight));
+        canvasButtonRight.addEventListener('mouseout', deactivateButton.bind(this, buttonRightObject, context.ButtonRight));
       }
 
       function deattachStageEvents() {
-        canvasButtonLeft.removeEventListener('mousemove', activateButton.bind(this, buttonLeftObject, ctxBtnL));
-        canvasButtonLeft.removeEventListener('mouseout', deactivateButton.bind(this, buttonLeftObject, ctxBtnL));
+        canvasButtonLeft.removeEventListener('mousemove', activateButton.bind(this, buttonLeftObject, context.ButtonLeft));
+        canvasButtonLeft.removeEventListener('mouseout', deactivateButton.bind(this, buttonLeftObject, context.ButtonLeft));
 
-        canvasButtonRight.removeEventListener('mousemove', activateButton.bind(this, buttonRightObject, ctxBtnR));
-        canvasButtonRight.removeEventListener('mouseout', deactivateButton.bind(this, buttonRightObject, ctxBtnR));
+        canvasButtonRight.removeEventListener('mousemove', activateButton.bind(this, buttonRightObject, context.ButtonRight));
+        canvasButtonRight.removeEventListener('mouseout', deactivateButton.bind(this, buttonRightObject, context.ButtonRight));
       }
 
 
@@ -639,12 +639,12 @@
       }
 
       function deepMenuActivateListener(event) {
-        // activateButton(deepMenuObject, ctxDeepMenu);
+        // activateButton(deepMenuObject, context.DeepMenu);
         whichLevelChosen(event);
       }
 
       function deepMenuDeactivateListener() {
-        deactivateButton(deepMenuObject, ctxDeepMenu);
+        deactivateButton(deepMenuObject, context.DeepMenu);
       }
 
       function attachDeepMenuEvents() {
@@ -685,50 +685,50 @@
       }
 
       function drawPoints() {
-        ctxP.font = "32px Georgia";
+        context.Points.font = "32px Georgia";
         if(!points.messageDrawn) {
 
-          ctxP.fillStyle = '#d50004';
-          ctxP.shadowColor = '#333';
-          ctxP.shadowBlur = 5;
-          ctxP.shadowOffsetX = 2;
-          ctxP.shadowOffsetY = 2;
-          ctxP.rotate(1 * Math.PI / 180);
-          ctxP.strokeStyle = "black";
-          ctxP.lineWidth = 2;
-          ctxP.strokeRect(10, 2, 100, 40);
-          ctxP.fillRect(10, 2, 100, 40);
+          context.Points.fillStyle = '#d50004';
+          context.Points.shadowColor = '#333';
+          context.Points.shadowBlur = 5;
+          context.Points.shadowOffsetX = 2;
+          context.Points.shadowOffsetY = 2;
+          context.Points.rotate(1 * Math.PI / 180);
+          context.Points.strokeStyle = "black";
+          context.Points.lineWidth = 2;
+          context.Points.strokeRect(10, 2, 100, 40);
+          context.Points.fillRect(10, 2, 100, 40);
 
 
-          ctxP.rotate(-2 * Math.PI / 180);
-          ctxP.font = "32px Georgia";
-          ctxP.fillStyle = '#fff';
+          context.Points.rotate(-2 * Math.PI / 180);
+          context.Points.font = "32px Georgia";
+          context.Points.fillStyle = '#fff';
           // resetShadow(ctxP);
-          ctxP.rotate(3 * Math.PI / 180);
-          ctxP.strokeText("wynik ", points.offsetX / 2, points.offsetY + 4);
-          ctxP.fillText("wynik ", points.offsetX / 2, points.offsetY + 4);
+          context.Points.rotate(3 * Math.PI / 180);
+          context.Points.strokeText("wynik ", points.offsetX / 2, points.offsetY + 4);
+          context.Points.fillText("wynik ", points.offsetX / 2, points.offsetY + 4);
           points.messageDrawn = true;
-          ctxP.rotate(-5 * Math.PI / 180);
+          context.Points.rotate(-5 * Math.PI / 180);
         }
-        ctxP.shadowColor = '#333';
-        ctxP.shadowBlur = 6;
-        ctxP.shadowOffsetX = 3;
-        ctxP.shadowOffsetY = 3;
-        ctxP.fillStyle = '#ee1123';
-        ctxP.clearRect(-5, points.offsetY + 25, 130, 66);
-        ctxP.lineWidth = 0.8;
-        ctxP.strokeRect(0, points.offsetY + 35, 100, 26);
-        ctxP.fillRect(0, points.offsetY + 35, 100, 26);
+        context.Points.shadowColor = '#333';
+        context.Points.shadowBlur = 6;
+        context.Points.shadowOffsetX = 3;
+        context.Points.shadowOffsetY = 3;
+        context.Points.fillStyle = '#ee1123';
+        context.Points.clearRect(-5, points.offsetY + 25, 130, 66);
+        context.Points.lineWidth = 0.8;
+        context.Points.strokeRect(0, points.offsetY + 35, 100, 26);
+        context.Points.fillRect(0, points.offsetY + 35, 100, 26);
 
 
-        ctxP.shadowBlur = 2;
-        ctxP.shadowOffsetX = 2;
-        ctxP.shadowOffsetY = 2;
+        context.Points.shadowBlur = 2;
+        context.Points.shadowOffsetX = 2;
+        context.Points.shadowOffsetY = 2;
 
-        ctxP.fillStyle = '#fff';
-        ctxP.font = "44px Georgia";
-        ctxP.strokeText(roundInfo.points, points.textOffsetX, points.textOffsetY * 3.3);
-        ctxP.fillText(roundInfo.points, points.textOffsetX, points.textOffsetY * 3.3);
+        context.Points.fillStyle = '#fff';
+        context.Points.font = "44px Georgia";
+        context.Points.strokeText(roundInfo.points, points.textOffsetX, points.textOffsetY * 3.3);
+        context.Points.fillText(roundInfo.points, points.textOffsetX, points.textOffsetY * 3.3);
       }
 
       function updatePoints() {
@@ -744,14 +744,14 @@
         bringToTheTop(canvas);
         let timeOfEffect = 500;
         let timeOfFrame = timeOfEffect / 10;
-        ctx.fillStyle = "#220000";
+        context.Main.fillStyle = "#220000";
 
         function redScreen() {
-          ctx.fillStyle = "#ff0000";
+          context.Main.fillStyle = "#ff0000";
         }
 
         function normalScreen() {
-          ctx.fillStyle = "#220000";
+          context.Main.fillStyle = "#220000";
         }
         let time = setInterval(redScreen, timeOfFrame);
         setTimeout(function() {
@@ -761,35 +761,35 @@
         setTimeout(function() {
           clearInterval(time);
         }, timeOfEffect / 2);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        context.Main.clearRect(0, 0, canvas.width, canvas.height);
         bringToTheTop(canvas, 10);
       }
       //===============================================================================================
       function displayCurrentLevel() {
-        ctxL.font = "32px Georgia";
+        context.Level.font = "32px Georgia";
         if(!level.messageDrawn) {
-          ctxL.shadowColor = '#333';
-          ctxL.shadowBlur = 3;
-          ctxL.shadowOffsetX = 2;
-          ctxL.shadowOffsetY = 2;
-          ctxL.fillStyle = '#af0000';
-          ctxL.strokeRect(5, 5, 120, 55);
-          ctxL.fillRect(5, 5, 120, 55);
-          ctxL.font = "32px Georgia";
-          ctxL.fillStyle = '#fff';
-          ctxL.strokeText("poziom ", level.offsetX / 2, level.offsetY);
-          ctxL.fillText("poziom ", level.offsetX / 2, level.offsetY);
+          context.Level.shadowColor = '#333';
+          context.Level.shadowBlur = 3;
+          context.Level.shadowOffsetX = 2;
+          context.Level.shadowOffsetY = 2;
+          context.Level.fillStyle = '#af0000';
+          context.Level.strokeRect(5, 5, 120, 55);
+          context.Level.fillRect(5, 5, 120, 55);
+          context.Level.font = "32px Georgia";
+          context.Level.fillStyle = '#fff';
+          context.Level.strokeText("poziom ", level.offsetX / 2, level.offsetY);
+          context.Level.fillText("poziom ", level.offsetX / 2, level.offsetY);
           level.messageDrawn = true;
         }
-        ctxL.clearRect(canvasLevelCounter.width / 4, level.offsetY + 10, canvasLevelCounter.width / 2, 40);
-        ctxL.fillStyle = '#dd0012';
-        ctxL.strokeRect(canvasLevelCounter.width / 4, level.offsetY + 10, canvasLevelCounter.width / 2, 40);
-        ctxL.fillRect(canvasLevelCounter.width / 4, level.offsetY + 10, canvasLevelCounter.width / 2, 40);
+        context.Level.clearRect(canvasLevelCounter.width / 4, level.offsetY + 10, canvasLevelCounter.width / 2, 40);
+        context.Level.fillStyle = '#dd0012';
+        context.Level.strokeRect(canvasLevelCounter.width / 4, level.offsetY + 10, canvasLevelCounter.width / 2, 40);
+        context.Level.fillRect(canvasLevelCounter.width / 4, level.offsetY + 10, canvasLevelCounter.width / 2, 40);
 
-        ctxL.font = "44px Georgia";
-        ctxL.fillStyle = '#fff';
-        ctxL.strokeText(roundInfo.currentLevel, level.offsetX * 2, level.offsetY * 2.3);
-        ctxL.fillText(roundInfo.currentLevel, level.offsetX * 2, level.offsetY * 2.3);
+        context.Level.font = "44px Georgia";
+        context.Level.fillStyle = '#fff';
+        context.Level.strokeText(roundInfo.currentLevel, level.offsetX * 2, level.offsetY * 2.3);
+        context.Level.fillText(roundInfo.currentLevel, level.offsetX * 2, level.offsetY * 2.3);
       }
 
       function showBackButton(context) {
@@ -866,17 +866,17 @@
 
       function showEndButtons(won) {
         if(won) {
-          bringToTheTop(ctxDeepMenu);
-          ctxDeepMenu.translate(150, 240);
-          showBackButton(ctxDeepMenu);
-          showNextButton(ctxDeepMenu);
-          ctxDeepMenu.translate(-150, -240);
+          bringToTheTop(context.DeepMenu);
+          context.DeepMenu.translate(150, 240);
+          showBackButton(context.DeepMenu);
+          showNextButton(context.DeepMenu);
+          context.DeepMenu.translate(-150, -240);
         } else {
-          bringToTheTop(ctxDeepMenu);
-          ctxDeepMenu.translate(150, 240);
-          showBackButton(ctxDeepMenu);
-          showNextButton(ctxDeepMenu);
-          ctxDeepMenu.translate(-150, -240);
+          bringToTheTop(context.DeepMenu);
+          context.DeepMenu.translate(150, 240);
+          showBackButton(context.DeepMenu);
+          showNextButton(context.DeepMenu);
+          context.DeepMenu.translate(-150, -240);
         }
       }
 
@@ -927,20 +927,16 @@
 
       function loading() {
         drawBackground();
-        ctxBg.fillStyle = "#000";
-        ctxBg.font = "36px Verdana";
-        ctxBg.fillText("Wczytywanie", canvas.width / 2 - 100, canvas.height / 2 - 10);
+        context.Background.fillStyle = "#000";
+        context.Background.font = "36px Verdana";
+        context.Background.fillText("Wczytywanie", canvas.width / 2 - 100, canvas.height / 2 - 10);
       }
 
       function start() {
         window.requestAnimationFrame(loop);
       }
 
-
-
-
       window.addEventListener('load', function() {
-
         this.lastRender = 0;
         loading();
         setTimeout(start, 300);
