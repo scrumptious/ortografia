@@ -88,7 +88,7 @@
       };
       const menuObject = {
         welcomeText: "Nowa gra",
-        currentLevel: "Wybierz poziom:"
+        chooseLevel: "Wybierz poziom:"
       };
       const deepMenuObject = {
         width: canvas.DeepMenu.width,
@@ -115,10 +115,7 @@
       const timer = {
         interval: 8000,
         id: null
-
       };
-      const buttonSize = 140;
-      const squareSize = 50;
       // button and inheriting specific buttons
       function Button() {
         this.size = 140;
@@ -442,8 +439,8 @@
         context.DeepMenu.fillStyle = gradient;
         context.Menu.clearRect(0, 0, button.size, button.size);
         context.DeepMenu.clearRect(0, 0, deepMenuObject.width, deepMenuObject.height);
-        context.DeepMenu.font = "bold 36px Irish Grover";
-        context.DeepMenu.fillText(menuObject.currentLevel, 30, 140);
+        context.DeepMenu.font = "bold 36px Irish Grover Georgia serif";
+        context.DeepMenu.fillText(menuObject.chooseLevel, 30, 140);
 
         gradient2.addColorStop('0', '#239fff');
         gradient2.addColorStop('0.4', '#a5e1ff');
@@ -942,6 +939,6 @@
         // debug(buttonLeft);
         this.lastRender = 0;
         loading();
-        setTimeout(start, 300);
+        setTimeout(start, 800);
       });
     })();
