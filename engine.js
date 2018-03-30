@@ -1,30 +1,38 @@
     (function() {
       "use strict";
-      const canvas = document.getElementById('canvas');
-      const width = canvas.width;
-      const height = canvas.height;
-      const canvasCloud1 = document.getElementById('canvasCloud1');
-      const canvasCloud2 = document.getElementById('canvasCloud2');
-      const canvasPoints = document.getElementById('canvasPointsCounter');
-      const canvasLevel = document.getElementById('canvasLevelCounter');
-      const canvasBg = document.getElementById('canvasBg');
-      const canvasMenu = document.getElementById('canvasMenu');
-      const canvasDeepMenu = document.getElementById('canvasDeepMenu');
-      const canvasButtonLeft = document.getElementById('canvasButtonLeft');
-      const canvasButtonRight = document.getElementById('canvasButtonRight');
-      const canvasBackButton = null;
-      const canvasNextButton = null;
+      const canvas = {
+        main: document.getElementById('canvas'),
+        Cloud1: document.getElementById('canvasCloud1'),
+        Cloud2: document.getElementById('canvasCloud2'),
+        Points: document.getElementById('canvasPointsCounter'),
+        Level: document.getElementById('canvasLevelCounter'),
+        Background: document.getElementById('canvasBg'),
+        Menu: document.getElementById('canvasMenu'),
+        DeepMenu: document.getElementById('canvasDeepMenu'),
+        ButtonLeft: document.getElementById('canvasButtonLeft'),
+        ButtonRight: document.getElementById('canvasButtonRight'),
+        BackButton: null,
+        NextButton: null,
+        get width() {
+          return this.main.width;
+        },
+        get height() {
+          return this.main.height;
+        }
+      };
+      // const canvasBackButton = null;
+      // const canvasNextButton = null;
 
-      const ctx = canvas.getContext('2d');
-      const ctxC1 = canvasCloud1.getContext('2d');
-      const ctxC2 = canvasCloud2.getContext('2d');
-      const ctxP = canvasPoints.getContext('2d');
-      const ctxL = canvasLevel.getContext('2d');
-      const ctxBg = canvasBg.getContext('2d');
-      const ctxMenu = canvasMenu.getContext('2d');
-      const ctxDeepMenu = canvasDeepMenu.getContext('2d');
-      const ctxBtnL = canvasButtonLeft.getContext('2d');
-      const ctxBtnR = canvasButtonRight.getContext('2d');
+      const ctx = canvas.main.getContext('2d');
+      const ctxC1 = canvas.Cloud1.getContext('2d');
+      const ctxC2 = canvas.Cloud2.getContext('2d');
+      const ctxP = canvas.Points.getContext('2d');
+      const ctxL = canvas.Level.getContext('2d');
+      const ctxBg = canvas.Background.getContext('2d');
+      const ctxMenu = canvas.Menu.getContext('2d');
+      const ctxDeepMenu = canvas.DeepMenu.getContext('2d');
+      const ctxBtnL = canvas.ButtonLeft.getContext('2d');
+      const ctxBtnR = canvas.ButtonRight.getContext('2d');
 
       const cloud1 = document.getElementById('cloud1');
       const cloud2 = document.getElementById('cloud2');
@@ -153,8 +161,6 @@
           // ctxMenu.clearRect(0, 0, buttonSize, buttonSize);
           gameStateObject.state = "deepMenu";
         } else if(gameStateObject.state === "deepMenu") {
-          console.log(roundInfo.currentLevel - 1);
-          console.dir(Object.create(wordsets[roundInfo.currentLevel - 1]));
           roundInfo.currentWordset = Object.create(wordsets[roundInfo.currentLevel - 1]);
           gameStateObject.state = "playing";
         } else if(gameStateObject.state === "playing") {
@@ -266,7 +272,6 @@
       }
 
       function startRound() {
-        console.log('-- started round');
         drawWords();
         drawStage();
         // roundInfo.currentWord++;
@@ -300,11 +305,11 @@
       }
 
       function updateCloud(cloud) {
-        if(cloud.x > width + cloud.width * 0.6) {
+        if(cloud.x > canvas.width + cloud.width * 0.6) {
           cloud.x = -cloud.width;
         }
         if(cloud.x + cloud.width < 0) {
-          cloud.x = width + cloud.width * 0.4;
+          cloud.x = canvas.width + cloud.width * 0.4;
         }
         cloud.x += cloud.speed;
       }
@@ -428,8 +433,8 @@
       //=====================================================================================================================
       function drawDeepMenu() {
         // Create gradient
-        var gradient = ctxDeepMenu.createLinearGradient(0, 0, deepMenuObject.width, 0);
-        var gradient2 = ctxDeepMenu.createLinearGradient(0, 0, deepMenuObject.width, deepMenuObject.height);
+        let gradient = ctxDeepMenu.createLinearGradient(0, 0, deepMenuObject.width, 0);
+        let gradient2 = ctxDeepMenu.createLinearGradient(0, 0, deepMenuObject.width, deepMenuObject.height);
         gradient.addColorStop("0", "#00005b");
         gradient.addColorStop("0.6", "#005160");
         gradient.addColorStop("1", "#4d00af");
@@ -458,12 +463,12 @@
 
       function drawBackground() {
         //background
-        let gradient = ctxBg.createLinearGradient(0, 0, width, height);
+        let gradient = ctxBg.createLinearGradient(0, 0, canvas.width, canvas.height);
         gradient.addColorStop('0', '#0553af');
         gradient.addColorStop('1.0', '#a5ffff');
         // ctxBg.fillStyle = '#86bddf';
         ctxBg.fillStyle = gradient;
-        ctxBg.fillRect(0, 0, width, height);
+        ctxBg.fillRect(0, 0, canvas.width, canvas.height);
         //clouds
         ctxC1.drawImage(cloud1, cloud1Object.x, cloud1Object.y);
         ctxC2.drawImage(cloud2, cloud2Object.x, cloud2Object.y);
@@ -499,7 +504,6 @@
 
       function drawResults() {
         checkIfWon();
-        console.log('TO DO - WRITE DRAW RESULTS FUNCTION');
         ctxBtnL.clearRect(0, 0, canvasButtonLeft.width, canvasButtonLeft.height);
         ctxBtnR.clearRect(0, 0, canvasButtonRight.width, canvasButtonRight.height);
         bringToTheTop(canvasDeepMenu);
@@ -579,7 +583,7 @@
 
 
       function nextButtonActivateListener(e) {
-        console.log('x: ' + e.clientX + '/ y: ' + e.clientY);
+        // console.log('x: ' + e.clientX + '/ y: ' + e.clientY);
       }
 
       function nextButtonDeactivateListener(e) {
@@ -597,7 +601,7 @@
       }
 
       function backButtonActivateListener(e) {
-        console.log('x: ' + e.clientX + '/ y: ' + e.clientY);
+        // console.log('x: ' + e.clientX + '/ y: ' + e.clientY);
 
         function checkIfButtonClicked(e) {
           let image = canvasDeepMenu.getImageData();
@@ -631,7 +635,7 @@
         let y = 1 + e.pageY - 175 - parseInt(computedStyle.top, 10);
         roundInfo.currentLevel = Math.ceil(x / 52) + Math.floor(y / 52) * 6;
 
-        answerBox.innerHTML = 'x: ' + x + ', y: ' + y;
+        // answerBox.innerHTML = 'x: ' + x + ', y: ' + y;
       }
 
       function deepMenuActivateListener(event) {
@@ -826,7 +830,7 @@
       }
 
       function showNextButton(context) {
-        var gradient = context.createLinearGradient(0, 0, 120, 0);
+        let gradient = context.createLinearGradient(0, 0, 120, 0);
         gradient.addColorStop("0", "magenta");
         gradient.addColorStop("0.8", "blue");
         gradient.addColorStop("1", "#a7f");
@@ -912,7 +916,7 @@
       }
 
       function loop(timestamp) {
-        var progress = timestamp - lastRender;
+        let progress = timestamp - lastRender;
 
         update(progress);
         draw();
@@ -925,7 +929,7 @@
         drawBackground();
         ctxBg.fillStyle = "#000";
         ctxBg.font = "36px Verdana";
-        ctxBg.fillText("Wczytywanie", width / 2 - 100, height / 2 - 10);
+        ctxBg.fillText("Wczytywanie", canvas.width / 2 - 100, canvas.height / 2 - 10);
       }
 
       function start() {
